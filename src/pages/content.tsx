@@ -77,7 +77,7 @@ export default function Content(){
                     <div className={"flex flex-col py-5 px-5 "}>
                         <div className={"flex flex-row"}>
                             <p className={"text-3xl text-white mb-5 mr-3"}>Content </p>
-                            <p className={"text-3xl text-gray-500 mb-5"}>Projects/</p>
+                            <p className={"text-3xl text-gray-500 mb-5"}>/projects</p>
                         </div>
 
                         <div className={"flex flex-row  mb-4"}>
@@ -87,7 +87,9 @@ export default function Content(){
                             <div className={"h-12 w-1 mx-2 rounded bg-gray-500"}/>
                             <div className={" space-x-2 flex flex-row "}>
                                 <Link className={"bg-gray-700 w-min flex whitespace-nowrap p-3 text-white rounded hover:bg-gray-500 "} to={"/content/add"}>add project</Link>
-                                <Link className={"bg-gray-700 w-min flex whitespace-nowrap p-3 text-white rounded hover:bg-gray-500 "} to={"/content/delete"}>delete project</Link>
+                                {/*<Link className={"bg-gray-700 w-min flex whitespace-nowrap p-3 text-white rounded hover:bg-gray-500 "} to={"/content/delete"}>delete project</Link>*/}
+                                <Link className={"bg-gray-700/20 w-min flex whitespace-nowrap p-3 text-white rounded text-white/20 "} to={"/content"}>delete project</Link>
+
                             </div>
                         </div>
 

@@ -1,11 +1,14 @@
 
 export type tProject = {id:string, name:string, location:string, imageurl:string}
-export type tPeople = [tProject] | [];
+export type tProjects = [tProject] | [];
+export type tMessage = {id:string, email:string, name:string, location:string, message:string,read:false}
+export type tMessages = [tMessage] | []
 
 
-const GET = async ( route:string, params:Record<string, string> ) =>{
 
-    let value : { resp : tPeople } = {resp: []}
+const GET = async <type>( route:string, params:Record<string, string> ) =>{
+
+    let value : { resp : type } = {resp: <type>[]}
 
     const queryParams = new URLSearchParams(params);
 
@@ -19,18 +22,19 @@ const GET = async ( route:string, params:Record<string, string> ) =>{
     })
         .then((response)=> response.json() )
         .then((data) => {
-            console.log(data)
-            console.log(data.error)
             if ( data.error){
-                value = { resp: [] }
+                console.log(data.error)
+
+                value = { resp: <type>[] }
             } else{
+                console.log(data)
                 value = { resp: data }
             }
 
         })
         .catch((error) => {
             console.error(error);
-            value = { resp: [] }
+            value = { resp: <type>[] }
         });
 
 
@@ -39,7 +43,7 @@ const GET = async ( route:string, params:Record<string, string> ) =>{
 
 const POST = async ( route:string, params:Record<string, string>, data:BodyInit ) =>{
 
-    let value : { resp : tPeople } = {resp: []}
+    let value : { resp : tProjects } = {resp: []}
 
     const queryParams = new URLSearchParams(params);
 
@@ -74,7 +78,7 @@ const POST = async ( route:string, params:Record<string, string>, data:BodyInit 
 
 const DELETE = async ( route:string, params:Record<string, string>, data:BodyInit) =>{
 
-    let value : { resp : tPeople } = {resp: []}
+    let value : { resp : tProjects } = {resp: []}
 
     const queryParams = new URLSearchParams(params)
 
@@ -105,13 +109,19 @@ const deleteProject = async (id:string) =>{
 }
 const   getProjects = async () =>{
 
-    return GET( "/projects",{})
+    return GET<tProjects>( "/projects",{})
 
 }
 
 const   addProjects = async (param:tProject) =>{
 
     return POST( "/projects",{}, JSON.stringify(param))
+
+}
+
+const   getMessages = async () =>{
+
+    return GET<tMessages>( "/messages",{})
 
 }
 
@@ -129,6 +139,10 @@ export default class API{
 
     static deleteProjects( id:string){
         return deleteProject(id)
+    }
+
+    static getMessages(){
+        return getMessages()
     }
 
 }
