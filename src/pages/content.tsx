@@ -2,23 +2,40 @@ import {useEffect, useState} from "react";
 import API, {tProject} from "../API/API.ts";
 import {Link, Outlet, useLocation, useNavigate} from "react-router-dom";
 
+type propsEntryOnRow = {fieldname:"name"|"id"|"location"|"imageurl",project: tProject, w:string}
+function EntryOnRow( {fieldname,project,w}:propsEntryOnRow){
+    const [ newField , setNewField ] = useState("")
+    const [ inEdit , setInEdit ] = useState(false)
+
+
+
+    return(
+        !inEdit ? (
+            <button className={`p-3  ${w} flex justify-start hover:bg-gray-400`} onClick={()=>setInEdit(true)}>
+                <p>{project[fieldname]}</p>
+            </button>
+        ):(
+            <div className={`p-3  ${w} flex justify-start bg-gray-800 justify-between`}>
+                <button className={"bg-red-500 rounded w-5"} onClick={()=>setInEdit(false)}>x</button>
+                <input className={"bg-gray-800"} type={"text"} value={newField} onChange={(e)=>setNewField(e.target.value)}/>
+                <button className={"bg-green-500 rounded w-5"} onClick={()=>setInEdit(false)}>y</button>
+            </div>
+        )
+
+    )
+}
 
 type propsProjectCard = {project: tProject, index:number}
 function ProjectCard({project, index}:propsProjectCard){
+
+
     return(
-        <div className={"bg-gray-600 text-white flex flex-row border-b-2 border-x-2 "}>
+        <div className={"bg-gray-600 text-white flex flex-row border-b-2 border-x-2 "} >
             <div className={"p-3 border-r-2 w-12 flex justify-center "}>
                 <p>{index+1}</p>
             </div>
-            <div className={"p-3 border-r-2 w-12 flex justify-center "}>
-                <p>{project.id}</p>
-            </div>
-            <div className={"p-3 border-r-2 w-64 flex justify-start hover:bg-gray-400"}>
-                <p>{project.name}</p>
-            </div>
-            <div className={"p-3  w-auto flex justify-center hover:bg-gray-400"}>
-                <p>{project.location}</p>
-            </div>
+            <EntryOnRow fieldname={"name"} project={project} w={"w-64 border-r-2"}/>
+            <EntryOnRow fieldname={"location"} project={project} w={"w-auto"}/>
         </div>
     )
 }
@@ -31,9 +48,6 @@ function ProjectTable({projects}:propsProjectTable){
             <div className={"bg-gray-700 text-white flex flex-row border-2 rounded-t-lg "}>
                 <div className={"p-3 border-r-2 w-12 flex justify-center "}>
                     <p></p>
-                </div>
-                <div className={"p-3 border-r-2 w-12 flex justify-center font-bold"}>
-                    <p>id</p>
                 </div>
                 <div className={"p-3 border-r-2 w-64 flex justify-start font-bold"}>
                     <p>project name</p>

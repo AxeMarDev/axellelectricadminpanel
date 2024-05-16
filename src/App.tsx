@@ -22,11 +22,19 @@ function App() {
   return (
     <BrowserRouter>
         <div className={"bg-gray-800 w-screen h-screen overflow-y-scroll flex flex-row"}>
-            <div className={"bg-gray-900 flex flex-col p-4"}>
-                <LinkButton to={"/"}>home</LinkButton>
-                <LinkButton to={"/messages"}>messages</LinkButton>
-                <LinkButton to={"/content"}>content</LinkButton>
+            <div className={"flex flex-col bg-gray-900 justify-between"}>
+                <div className={" flex flex-col p-4"}>
+                    <LinkButton to={"/"}>home</LinkButton>
+                    <LinkButton to={"/messages"}>messages</LinkButton>
+                    <LinkButton to={"/content"}>content</LinkButton>
+                </div>
+                <div className={"p-5 font-light"}>
+                    <p className={"text-white/20 "}>ui: v0.0.1</p>
+                    <p className={"text-white/20 "}>api: v0.0.1</p>
+                </div>
+
             </div>
+
             <Routes>
                 <Route path="/" element={<p>message</p>}/>
                 <Route path="/messages" element={<Messages/>}/>
