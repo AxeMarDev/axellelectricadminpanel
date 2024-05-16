@@ -1,13 +1,42 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import API, {tProject} from "../API/API.ts";
 import {Link, Outlet, useLocation, useNavigate} from "react-router-dom";
 
-type propsEntryOnRow = {fieldname:"name"|"id"|"location"|"imageurl",project: tProject, w:string}
-function EntryOnRow( {fieldname,project,w}:propsEntryOnRow){
-    const [ newField , setNewField ] = useState("")
+type propsEntryOnRow = {fieldname:"name"|"id"|"location"|"imageurl"|"date",project: tProject, w:string, handleRefresh:()=>void}
+function EntryOnRow( {fieldname,project,w, handleRefresh}:propsEntryOnRow){
+
+    const [ newField , setNewField ] = useState(project[fieldname])
     const [ inEdit , setInEdit ] = useState(false)
 
+    const handleResetField = ()=>{
+        setInEdit(false)
+        setNewField(project[fieldname])
 
+    }
+
+    const handleUpdateProject = () =>{
+        const newProject:tProject = {...project, [fieldname]:newField}
+        console.log( "new update: " + JSON.stringify(newProject))
+        API.updateProject(newProject).then((resp)=>{
+            console.log(resp)
+            setInEdit(false)
+            handleRefresh()
+        })
+    }
+
+
+    const handleKeyPress = (event:React.KeyboardEvent<HTMLInputElement>) =>{
+        const keyPressed = event.key;
+
+        console.log(keyPressed)
+
+        if( keyPressed ==="Enter"){
+            handleUpdateProject()
+        } else if(keyPressed === "Escape"){
+            handleResetField()
+        }
+
+    }
 
     return(
         !inEdit ? (
@@ -16,17 +45,17 @@ function EntryOnRow( {fieldname,project,w}:propsEntryOnRow){
             </button>
         ):(
             <div className={`p-3  ${w} flex justify-start bg-gray-800 justify-between`}>
-                <button className={"bg-red-500 rounded w-5"} onClick={()=>setInEdit(false)}>x</button>
-                <input className={"bg-gray-800"} type={"text"} value={newField} onChange={(e)=>setNewField(e.target.value)}/>
-                <button className={"bg-green-500 rounded w-5"} onClick={()=>setInEdit(false)}>y</button>
+                <button className={"bg-red-500 rounded w-5"} onClick={ ()=>handleResetField()}>x</button>
+                <input autoFocus onBlur={()=>handleResetField()} className={"bg-gray-800 focus:outline-none"} type={"text"} value={newField} onChange={(e)=>setNewField(e.target.value)} onKeyPress={(e) => handleKeyPress(e)}/>
+                <button className={"bg-green-500 rounded w-5"} onClick={()=>handleUpdateProject()}>y</button>
             </div>
         )
 
     )
 }
 
-type propsProjectCard = {project: tProject, index:number}
-function ProjectCard({project, index}:propsProjectCard){
+type propsProjectCard = {project: tProject, index:number, handleRefresh: ()=>void}
+function ProjectCard({project, index, handleRefresh}:propsProjectCard){
 
 
     return(
@@ -34,15 +63,15 @@ function ProjectCard({project, index}:propsProjectCard){
             <div className={"p-3 border-r-2 w-12 flex justify-center "}>
                 <p>{index+1}</p>
             </div>
-            <EntryOnRow fieldname={"name"} project={project} w={"w-64 border-r-2"}/>
-            <EntryOnRow fieldname={"location"} project={project} w={"w-auto"}/>
+            <EntryOnRow fieldname={"name"} project={project} w={"w-64 border-r-2"} handleRefresh={handleRefresh}/>
+            <EntryOnRow fieldname={"location"} project={project} w={"w-auto"} handleRefresh={handleRefresh}/>
         </div>
     )
 }
 
 
-type propsProjectTable = {projects:tProject[]}
-function ProjectTable({projects}:propsProjectTable){
+type propsProjectTable = {projects:tProject[], handleRefresh: ()=>void}
+function ProjectTable({projects, handleRefresh}:propsProjectTable){
     return(
         <>
             <div className={"bg-gray-700 text-white flex flex-row border-2 rounded-t-lg "}>
@@ -57,7 +86,7 @@ function ProjectTable({projects}:propsProjectTable){
                 </div>
             </div>
             {projects.map((project, index, )=>{
-                return <ProjectCard project={project} index={index}/>
+                return <ProjectCard project={project} index={index} handleRefresh={handleRefresh}/>
             })}
         </>
     )
@@ -67,9 +96,14 @@ export default function Content(){
 
     const [inOutlet, setInOutlet] = useState(true)
     const [projects, setProjects] = useState<tProject[]>([])
+    const [refresh, setRefresh] = useState(0)
     const navigate = useNavigate()
     const location = useLocation()
     const currentPath = location.pathname
+
+    const handleRefresh = () =>{
+        setRefresh(refresh+1)
+    }
 
     useEffect(()=>{
         if( currentPath !== "/content"){
@@ -81,7 +115,7 @@ export default function Content(){
             })
             setInOutlet(true)
         }
-    },[navigate])
+    },[navigate,refresh])
 
 
 
@@ -107,7 +141,7 @@ export default function Content(){
                             </div>
                         </div>
 
-                        <ProjectTable projects={projects}/>
+                        <ProjectTable projects={projects} handleRefresh={handleRefresh}/>
 
                     </div>
                 </div>
