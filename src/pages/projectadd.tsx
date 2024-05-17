@@ -15,14 +15,14 @@ function InputField({fieldname,fieldsState}:propsInputField){
 }
 export default function ProjectAdd(){
 
-    const fieldState = useState({id:"", name:"", location:"", imageurl:""})
+    const fieldState = useState({id:"", name:"", location:"", imageurl:"", date:""})
     const navigation = useNavigate()
 
     const handleEndAddProject = () =>{
         API.addProjects(fieldState[0]).then(()=>{
             navigation(-1)
         })
-        fieldState[1]({id:"", name:"", location:"", imageurl:""})
+        fieldState[1]({id:"", name:"", location:"", imageurl:"", date:""})
     }
 
 
@@ -48,6 +48,7 @@ export default function ProjectAdd(){
                 <InputField fieldname={"name"}  fieldsState={fieldState}/>
                 <InputField fieldname={"location"} fieldsState={fieldState}/>
                 <InputField fieldname={"imageurl"} fieldsState={fieldState}/>
+
                 <button onClick={()=>handleEndAddProject()}>submit</button>
             </div>
 

@@ -1,7 +1,7 @@
 
 export type tProject = {id:string, name:string, location:string, imageurl:string, date:string}
 export type tProjects = [tProject] | [];
-export type tMessage = {id:string, email:string, name:string, location:string, message:string,read:false}
+export type tMessage = {id:string, email:string, name:string, location:string, message:string,read:boolean}
 export type tMessages = [tMessage] | []
 
 
@@ -157,6 +157,10 @@ const   getMessages = async () =>{
 
 }
 
+const updateMessage = async( param:tMessage )=>{
+    return PATCH("/messages", {id:param.id}, JSON.stringify(param))
+}
+
 
 
 
@@ -180,5 +184,9 @@ export default class API{
     }
     static updateProject(param:tProject){
         return updateProject(param)
+    }
+
+    static updateMessage(param:tMessage){
+        return updateMessage(param)
     }
 }
