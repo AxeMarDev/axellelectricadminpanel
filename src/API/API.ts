@@ -3,6 +3,7 @@ export type tProject = {id:string, name:string, location:string, imageurl:string
 export type tProjects = [tProject] | [];
 export type tMessage = {id:string, email:string, name:string, location:string, message:string,read:boolean}
 export type tMessages = [tMessage] | []
+export type tCompany = {id:string, company_name:string}
 
 
 
@@ -161,6 +162,18 @@ const updateMessage = async( param:tMessage )=>{
     return PATCH("/messages", {id:param.id}, JSON.stringify(param))
 }
 
+const   getCompanies = async () =>{
+
+    return GET<tCompany[]>( "/companies",{})
+
+}
+
+const  addCompany = async (param:tCompany) =>{
+
+    return POST( "/companies",{}, JSON.stringify(param))
+
+}
+
 
 
 
@@ -188,5 +201,13 @@ export default class API{
 
     static updateMessage(param:tMessage){
         return updateMessage(param)
+    }
+
+    static getCompanies(){
+        return getCompanies()
+    }
+
+    static addCompany(param:tCompany){
+        return addCompany(param)
     }
 }

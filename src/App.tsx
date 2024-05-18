@@ -5,6 +5,7 @@ import {ReactNode} from "react";
 import ProjectAdd from "./pages/projectadd.tsx";
 import Projectdelete from "./pages/projectdelete.tsx";
 import Messages from "./pages/messages.tsx";
+import Home from "./pages";
 
 
 type propsLinkButton = {to:string, children:ReactNode}
@@ -38,7 +39,7 @@ function App() {
             </div>
 
             <Routes>
-                <Route path="/" element={<p>message</p>}/>
+                <Route path="/" element={<Home/>}/>
                 <Route path="/messages" element={<Messages/>}/>
                 <Route path="/content" element={ <Content/>}>
                     <Route path="add" element={ <ProjectAdd/> }></Route>

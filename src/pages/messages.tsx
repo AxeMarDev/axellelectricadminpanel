@@ -26,10 +26,10 @@ function MessageCard({message, index, handleRefresh}:propsMessageCard){
             <div className={"p-3  w-40 border-r-2 flex justify-center border-r-gray-700 "}>
                 <div onMouseOver={()=>setMouseOverRead(true)} onMouseLeave={()=>setMouseOverRead(false)}>
                     {!mouseOverRead ? (
-                        <div className={`${message.read ? "bg-green-700 rounded px-2 border border-green-400" : "bg-yellow-800 rounded px-2 border border-yellow-400"}`}>{message.read ? (<p>read</p>) : (<p> not read</p>)}</div>
+                        <div className={`${message.read ? "bg-green-700 rounded px-2 border border-green-400" : "bg-yellow-800 rounded px-2 border border-yellow-400"} w-20`}>{message.read ? (<p>read</p>) : (<p> not read</p>)}</div>
                     ):(
-                        <button onClick={()=>handleChangeRead()} className={"hover:bg-green-500 bg-white/0 "}>
-                            <div className={`${message.read ? "bg-red-700 rounded px-2 border border-red-400" : "bg-blue-800 rounded px-2 border border-blue-400"}`}>{!message.read ? (<p>read</p>) : (<p> un read</p>)}</div>
+                        <button onClick={()=>handleChangeRead()} className={"hover:bg-green-500 bg-white/0 w-20"}>
+                            <div className={`${message.read ? "bg-red-700 rounded px-2 border border-red-400" : "bg-blue-800 rounded px-2 border border-blue-400"} `}>{!message.read ? (<p>read</p>) : (<p> un read</p>)}</div>
                         </button>
                     )}
                 </div>
@@ -73,7 +73,7 @@ export default function Messages(){
 
     const [messages, setMessages]= useState<tMessages>([])
     const [refresh, setRefresh ]= useState( false)
-    const [ filterRead , setFilterRead ] = useState(false)
+    const [ filterRead , setFilterRead ] = useState(true)
 
     const handleRefresh = () =>{
         setRefresh(!refresh )
