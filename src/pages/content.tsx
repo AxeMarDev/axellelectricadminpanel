@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import API, {tProject} from "../API/API.ts";
 import {Link, Outlet, useLocation, useNavigate} from "react-router-dom";
+import {cookieContent} from "../App.tsx";
 
 
 type propsEntryOnRow = {fieldname:"name"|"id"|"location"|"imageurl"|"date",project: tProject, w:string, handleRefresh:()=>void, controlString:string, index:number}
@@ -290,7 +291,8 @@ function ProjectTable({projects, handleRefresh,controlString}:propsProjectTable)
     )
 }
 
-export default function Content(){
+type propsContent = {id:cookieContent}
+export default function Content({id}:propsContent){
 
     const [inOutlet, setInOutlet] = useState(true)
     const [projects, setProjects] = useState<tProject[]>([])
@@ -306,7 +308,7 @@ export default function Content(){
 
     useEffect(()=>{
 
-        if( currentPath !== "/content"){
+        if( currentPath !== `/${id.id}/content`){
             setInOutlet(false)
         } else{
             API.getProjects().then((projects)=>{

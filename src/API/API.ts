@@ -4,7 +4,7 @@ export type tProjects = [tProject] | [];
 export type tMessage = {id:string, email:string, name:string, location:string, message:string,read:boolean}
 export type tMessages = [tMessage] | []
 export type tCompany = {id:string, company_name:string}
-
+export type tEmployee = {id:string, company_id:string,first_name:string, last_name:string, email:string, is_master:boolean }
 
 
 const GET = async <type>( route:string, params:Record<string, string> ) =>{
@@ -42,13 +42,15 @@ const GET = async <type>( route:string, params:Record<string, string> ) =>{
     return value
 }
 
-const POST = async ( route:string, params:Record<string, string>, data:BodyInit ) =>{
+const POST = async <type> ( route:string, params:Record<string, string>, data:BodyInit ) =>{
 
-    let value : { resp : tProjects } = {resp: []}
+    let value : { resp : type } = {resp: <type> []}
 
     const queryParams = new URLSearchParams(params);
 
     const url = `http://localhost:8080${route}?${queryParams}`;
+
+    console.log(url)
 
     await fetch(url, {
         method: 'POST',
@@ -62,7 +64,7 @@ const POST = async ( route:string, params:Record<string, string>, data:BodyInit 
             console.log(data)
             console.log(data.error)
             if ( data.error){
-                value = { resp: [] }
+                value = { resp: <type>[] }
             } else{
                 value = { resp: data }
             }
@@ -70,7 +72,7 @@ const POST = async ( route:string, params:Record<string, string>, data:BodyInit 
         })
         .catch((error) => {
             console.error(error);
-            value = { resp: [] }
+            value = { resp: <type>[] }
         });
 
 
@@ -168,12 +170,17 @@ const   getCompanies = async () =>{
 
 }
 
-const  addCompany = async (param:tCompany) =>{
-
-    return POST( "/companies",{}, JSON.stringify(param))
+const  addCompany = async (param:tCompany &  { username:string , email:string}) =>{
+    console.log(param)
+    return POST<tCompany>( "/companies",{}, JSON.stringify(param))
 
 }
 
+const   getEmployees = async () =>{
+
+    return GET<tEmployee[]>( "/employees",{})
+
+}
 
 
 
@@ -207,7 +214,11 @@ export default class API{
         return getCompanies()
     }
 
-    static addCompany(param:tCompany){
+    static addCompany(param:tCompany & { username:string , email:string}){
         return addCompany(param)
+    }
+
+    static getEmployees(){
+        return getEmployees()
     }
 }
